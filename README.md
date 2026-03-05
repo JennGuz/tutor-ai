@@ -57,28 +57,38 @@ source .venv/bin/activate
 
 #### 1.2 Instalar dependencias
 
-Asegúrate de tener el archivo `api/requirements.txt` (dentro de la carpeta `api`) con:
 
-```text
-django
-django-ninja
-django-cors-headers
-```
-
-Luego ejecuta:
+Ejecuta:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+Verifica que `django-cors-headers` esté incluido en el archivo `api/requirements.txt`, ya que es necesario para permitir CORS hacia el frontend.
+
 #### 1.3 Migraciones y ejecución del servidor
 
 ```bash
 python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver
 ```
 
-El backend quedará escuchando en `http://localhost:8000`.
+El backend quedará escuchando en `http://localhost:8000` por defecto.
+
+#### 1.4 Configuración de CORS en Django
+
+- En `api/api/settings.py`, asegúrate de que `'corsheaders'` esté incluido en la lista `INSTALLED_APPS`.
+- Verifica que `'corsheaders.middleware.CorsMiddleware'` esté en la lista `MIDDLEWARE` **por encima** de `'django.middleware.common.CommonMiddleware'`.
+- Al final del archivo `settings.py`, define:
+
+```python
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+```
+
+> Nota: si el frontend no puede recibir datos del backend, verifica que `django-cors-headers` esté instalado (incluido en `api/requirements.txt`) y correctamente configurado en `api/api/settings.py`.
 
 ---
 

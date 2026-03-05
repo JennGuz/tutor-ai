@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const socketio = require('socket.io');
+const { Server } = require('socket.io')
 const cors = require('cors');
 
 const app = express();
@@ -12,13 +12,14 @@ const io = new Server(server, {
         origin: "http://localhost:3000",
         methods: ["GET", "POST"],
     }
-})
+});
 
 setInterval(() => {
     const message = `Nueva actualización del tutor: ${new Date().toLocaleTimeString()}`;
     console.log("Enviando mensaje:", message);
-    io.emit("public-notification", { message: message });
-}, 10000)
+    
+    io.emit("public-notifications", { message: message }); 
+}, 10000);
 
 server.listen(4000, () => {
     console.log('Servidor de streaming en puerto 4000');
